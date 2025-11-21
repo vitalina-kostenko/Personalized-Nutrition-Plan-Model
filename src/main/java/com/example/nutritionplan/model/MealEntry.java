@@ -1,0 +1,20 @@
+package com.example.nutritionplan.model;
+
+public class MealEntry {
+    private Integer meal_id;
+    private Integer user_id;
+    private String meal_type;
+    private String meal_date; // String для простоти
+
+    // Конструктор, геттери та сеттери
+    public MealEntry() {}
+
+    public Integer getMeal_id() { return meal_id; }
+    public void setMeal_id(Integer meal_id) { this.meal_id = meal_id; }
+    public Integer getUser_id() { return user_id; }
+    public void setUser_id(Integer user_id) { this.user_id = user_id; }
+    public String getMeal_type() { return meal_type; }
+    public void setMeal_type(String meal_type) { this.meal_type = meal_type; }
+    public String getMeal_date() { return meal_date; }
+    public void setMeal_date(String meal_date) { this.meal_date = meal_date; }
+}
