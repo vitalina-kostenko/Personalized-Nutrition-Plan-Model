@@ -10,6 +10,12 @@ repositories {
 }
 
 dependencies {
+    implementation("org.apache.logging.log4j:log4j-api:2.20.0")
+    implementation("org.apache.logging.log4j:log4j-core:2.20.0")
+
+    testImplementation("org.mockito:mockito-core:5.4.0")
+    testImplementation("org.mockito:mockito-junit-jupiter:5.4.0")
+
     implementation("com.fasterxml.jackson.core:jackson-databind:2.15.2")
 
     testImplementation(platform("org.junit:junit-bom:5.10.0"))

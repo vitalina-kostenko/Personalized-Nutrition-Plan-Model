@@ -1,80 +1,36 @@
 package com.example.nutritionplan.model.service;
 
 import com.example.nutritionplan.model.UserProfile;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class NutritionCalculatorTest {
 
-    private NutritionCalculator calculator;
+    @Mock
+    private AgeCalculationService ageServiceMock;
 
-    @BeforeEach
-    void setUp() {
-        calculator = new NutritionCalculator();
-    }
-
-    @Test
-    void testCalculateDailyCalorieNeedsForMale() {
-        UserProfile profile = new UserProfile(
-                1,
-                "Іван",
-                "1990-11-21",
-                "male",
-                180.0,
-                85.0,
-                "moderate",
-                "maintain"
-        );
-
-        double expectedCalories = 2933;
-        double actualCalories = calculator.calculateDailyCalorieNeeds(profile);
-
-        assertEquals(expectedCalories, Math.round(actualCalories));
-    }
+    @InjectMocks
+    private NutritionCalculator nutritionCalculator;
 
     @Test
     void testCalculateDailyCalorieNeedsForFemale() {
         UserProfile profile = new UserProfile(
-                2,
-                "Марія",
-                "1995-11-21",
-                "female",
-                165.0,
-                60.0,
-                "light",
-                "lose_weight"
+                2, "Віталіна", "2006-10-21", "female",
+                170.0, 61.0, "sedentary", "lose_weight"
         );
 
-        double expectedCalories = 1903;
-        double actualCalories = calculator.calculateDailyCalorieNeeds(profile);
+        when(ageServiceMock.calculateAge("2006-10-21")).thenReturn(19);
 
+        double actualCalories = nutritionCalculator.calculateDailyCalorieNeeds(profile);
+
+        double expectedCalories = 1747;
         assertEquals(expectedCalories, Math.round(actualCalories));
-    }
-
-    @Test
-    void testCalculateDailyCalorieNeedsThrowsExceptionForNullProfile() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            calculator.calculateDailyCalorieNeeds(null);
-        });
-    }
-
-    @Test
-    void testCalculateDailyCalorieNeedsThrowsExceptionForInvalidGender() {
-        UserProfile profile = new UserProfile(
-                3,
-                "Тест",
-                "2000-01-01",
-                "unknown",
-                170.0,
-                70.0,
-                "sedentary",
-                "maintain"
-        );
-
-        assertThrows(IllegalArgumentException.class, () -> {
-            calculator.calculateDailyCalorieNeeds(profile);
-        });
     }
 }

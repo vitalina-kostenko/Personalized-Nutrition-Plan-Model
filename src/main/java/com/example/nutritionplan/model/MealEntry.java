@@ -6,8 +6,15 @@ public class MealEntry {
     private String meal_type;
     private String meal_date; // String для простоти
 
-    // Конструктор, геттери та сеттери
-    public MealEntry() {}
+    public MealEntry() {
+    }
+
+    public MealEntry(Integer meal_id, Integer user_id, String meal_type, String meal_date) {
+        this.meal_id = meal_id;
+        this.user_id = user_id;
+        this.meal_type = meal_type;
+        this.meal_date = meal_date;
+    }
 
     public Integer getMeal_id() { return meal_id; }
     public void setMeal_id(Integer meal_id) { this.meal_id = meal_id; }
@@ -18,3 +25,4 @@ public class MealEntry {
     public String getMeal_date() { return meal_date; }
     public void setMeal_date(String meal_date) { this.meal_date = meal_date; }
 }
+

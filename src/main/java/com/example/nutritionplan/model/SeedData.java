@@ -9,11 +9,9 @@ public class SeedData {
     private List<MealEntry> meal_entries;
     private List<MealItem> meal_items;
 
-    // Конструктор без аргументів (обов'язковий для JSON-маперів)
     public SeedData() {
     }
 
-    // Getters and Setters
     public List<FoodItem> getFood_items() {
         return food_items;
     }

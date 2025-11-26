@@ -1,22 +1,40 @@
-package com.example.nutritionplan.model.service;
+package com.example.nutritionplan.model.service; // Перевірте, чи правильний пакет
 
 import com.example.nutritionplan.model.UserProfile;
-
-import java.time.LocalDate;
-import java.time.Period;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class NutritionCalculator {
+    private static final Logger logger = LogManager.getLogger(NutritionCalculator.class);
+
+    private final AgeCalculationService ageService;
+
+
+    public NutritionCalculator(AgeCalculationService ageService) {
+        this.ageService = ageService;
+    }
 
     public double calculateDailyCalorieNeeds(UserProfile profile) {
+        logger.info("Починаємо розрахунок калорій для користувача: {}", profile.getFirst_name());
+
         if (profile == null) {
+            logger.error("Профіль користувача дорівнює null!");
             throw new IllegalArgumentException("Профіль користувача не може бути null");
         }
 
-        int age = calculateAge(profile.getDate_of_birth());
-        double bmr = calculateBmr(profile.getGender(), profile.getWeight_kg(), profile.getHeight_cm(), age);
-        double activityMultiplier = getActivityMultiplier(profile.getActivity_level());
+        int age = ageService.calculateAge(profile.getDate_of_birth());
+        logger.debug("Розрахований вік: {} років", age);
 
-        return bmr * activityMultiplier;
+        double bmr = calculateBmr(profile.getGender(), profile.getWeight_kg(), profile.getHeight_cm(), age);
+        logger.debug("Розрахований BMR: {}", bmr);
+
+        double activityMultiplier = getActivityMultiplier(profile.getActivity_level());
+        logger.debug("Множник активності: {}", activityMultiplier);
+
+        double result = bmr * activityMultiplier;
+        logger.info("Завершено розрахунок. Рекомендована норма: {} ккал", Math.round(result));
+
+        return result;
     }
 
     private double calculateBmr(String gender, double weightKg, double heightCm, int age) {
@@ -35,27 +53,12 @@ public class NutritionCalculator {
         }
 
         switch (activityLevel.toLowerCase()) {
-            case "sedentary":
-                return 1.2;
-            case "light":
-                return 1.375;
-            case "moderate":
-                return 1.55;
-            case "active":
-                return 1.725;
-            case "very_active":
-                return 1.9;
-            default:
-                return 1.2;
+            case "sedentary": return 1.2;
+            case "light": return 1.375;
+            case "moderate": return 1.55;
+            case "active": return 1.725;
+            case "very_active": return 1.9;
+            default: return 1.2;
         }
-    }
-
-    private int calculateAge(String dateOfBirth) {
-        if (dateOfBirth == null || dateOfBirth.isEmpty()) {
-            throw new IllegalArgumentException("Дата народження не може бути порожньою");
-        }
-        LocalDate birthDate = LocalDate.parse(dateOfBirth);
-        LocalDate currentDate = LocalDate.now();
-        return Period.between(birthDate, currentDate).getYears();
     }
 }

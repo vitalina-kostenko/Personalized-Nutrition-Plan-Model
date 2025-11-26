@@ -6,8 +6,16 @@ public class MealItem {
     private Integer food_id;
     private Double quantity_g;
 
-    // Конструктор, геттери та сеттери
-    public MealItem() {}
+    public MealItem() {
+
+    }
+
+    public MealItem(Integer meal_item_id, Integer meal_id, Integer food_id, Double quantity_g) {
+        this.meal_item_id = meal_item_id;
+        this.meal_id = meal_id;
+        this.food_id = food_id;
+        this.quantity_g = quantity_g;
+    }
 
     public Integer getMeal_item_id() { return meal_item_id; }
     public void setMeal_item_id(Integer meal_item_id) { this.meal_item_id = meal_item_id; }

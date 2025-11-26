@@ -1,5 +1,7 @@
 package com.example.nutritionplan.model;
 
+import java.util.List;
+
 public class FoodItem {
     private Integer food_id;
     private String name;
@@ -7,8 +9,8 @@ public class FoodItem {
     private Double protein_g;
     private Double carbs_g;
     private Double fat_g;
+    private List<String> categories;
 
-    // Конструктор, геттери та сеттери
     public FoodItem() {
     }
 
@@ -58,5 +60,13 @@ public class FoodItem {
 
     public void setFat_g(Double fat_g) {
         this.fat_g = fat_g;
+    }
+
+    public List<String> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<String> categories) {
+        this.categories = categories;
     }
 }
