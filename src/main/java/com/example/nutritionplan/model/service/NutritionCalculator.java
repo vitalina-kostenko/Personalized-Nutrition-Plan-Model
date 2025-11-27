@@ -1,4 +1,4 @@
-package com.example.nutritionplan.model.service; // Перевірте, чи правильний пакет
+package com.example.nutritionplan.model.service;
 
 import com.example.nutritionplan.model.UserProfile;
 import org.apache.logging.log4j.LogManager;

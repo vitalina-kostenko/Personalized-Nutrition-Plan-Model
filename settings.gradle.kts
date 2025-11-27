@@ -1,1 +1,1 @@
-rootProject.name = "op-2"
+rootProject.name = "personalized-nutrition-plan"
