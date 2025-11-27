@@ -2,7 +2,7 @@ package com.example.nutritionplan.model.shell;
 
 import com.example.nutritionplan.model.DailyLog;
 import com.example.nutritionplan.model.FoodItem;
-import com.example.nutritionplan.model.UserHistory;
+import com.example.nutritionplan.model.user.UserHistory;
 import com.example.nutritionplan.model.service.NutritionCalculator;
 
 import java.io.PrintStream;
@@ -59,7 +59,6 @@ public class ShowReportCommand implements Command {
         return Result.CONTINUE;
     }
 
-    // Допоміжні методи, скопійовані з вашого старого Main.java
     private Optional<DailyLog> findLogByDate(String date) {
         return history.getDailyLogs().stream().filter(log -> date.equals(log.getDate())).findFirst();
     }

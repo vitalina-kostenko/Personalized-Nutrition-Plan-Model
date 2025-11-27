@@ -1,6 +1,9 @@
 plugins {
     id("java")
+    id("org.springframework.boot") version "3.3.5"
+    id("io.spring.dependency-management") version "1.1.6"
 }
+
 
 group = "org.example"
 version = "1.0-SNAPSHOT"
@@ -10,6 +13,12 @@ repositories {
 }
 
 dependencies {
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+
+    runtimeOnly("com.h2database:h2")
+    runtimeOnly("org.postgresql:postgresql")
+
     implementation("org.apache.logging.log4j:log4j-api:2.20.0")
     implementation("org.apache.logging.log4j:log4j-core:2.20.0")
 

@@ -1,10 +1,21 @@
 package com.example.nutritionplan.model;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "meal_entries")
 public class MealEntry {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer meal_id;
+
+    @Column(nullable = false)
     private Integer user_id;
+
+    @Column(nullable = false)
     private String meal_type;
-    private String meal_date; // String для простоти
+
+    @Column(nullable = false)
+    private String meal_date;
 
     public MealEntry() {
     }
