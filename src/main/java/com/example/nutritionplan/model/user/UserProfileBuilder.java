@@ -1,4 +1,4 @@
-package com.example.nutritionplan.model;
+package com.example.nutritionplan.model.user;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
@@ -7,7 +7,6 @@ public class UserProfileBuilder {
     private UserProfile profile = new UserProfile();
 
     public UserProfileBuilder() {
-        // Ініціалізація полів початковими даними за замовчуванням
         profile.setGoal("maintain");
         profile.setActivity_level("sedentary");
     }
@@ -57,7 +56,6 @@ public class UserProfileBuilder {
     }
 
     public UserProfile build() {
-        // Перевірка коректності даних перед поверненням об'єкта
         if (profile.getUser_id() == null || profile.getUser_id() <= 0) {
             throw new IllegalStateException("ID користувача не встановлено або є некоректним.");
         }

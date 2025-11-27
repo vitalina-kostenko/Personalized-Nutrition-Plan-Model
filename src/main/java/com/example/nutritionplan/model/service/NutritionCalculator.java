@@ -1,9 +1,11 @@
 package com.example.nutritionplan.model.service;
 
-import com.example.nutritionplan.model.UserProfile;
+import com.example.nutritionplan.model.user.UserProfile;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Service;
 
+@Service
 public class NutritionCalculator {
     private static final Logger logger = LogManager.getLogger(NutritionCalculator.class);
 

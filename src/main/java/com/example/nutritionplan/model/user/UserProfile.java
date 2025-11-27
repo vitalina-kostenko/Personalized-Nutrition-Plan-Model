@@ -1,13 +1,34 @@
-package com.example.nutritionplan.model;
+package com.example.nutritionplan.model.user;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "user_profiles")
 public class UserProfile {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer user_id;
+
+    @Column(name = "first_name", nullable = false)
     private String first_name;
+
+    @Column(nullable = false)
     private String date_of_birth;
+
+    @Column(nullable = false)
     private String gender;
+
+    @Column(name = "height_cm", nullable = false)
     private Double height_cm;
+
+    @Column(name = "weight_kg", nullable = false)
     private Double weight_kg;
+
+    @Column(nullable = false)
     private String activity_level;
+
+    @Column(nullable = false)
     private String goal;
 
     public UserProfile() {

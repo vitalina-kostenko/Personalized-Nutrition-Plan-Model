@@ -1,6 +1,6 @@
 package com.example.nutritionplan.model.service;
 
-import com.example.nutritionplan.model.UserProfile;
+import com.example.nutritionplan.model.user.UserProfile;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

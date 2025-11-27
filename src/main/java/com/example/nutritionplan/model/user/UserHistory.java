@@ -1,4 +1,6 @@
-package com.example.nutritionplan.model;
+package com.example.nutritionplan.model.user;
+
+import com.example.nutritionplan.model.DailyLog;
 
 import java.util.ArrayList;
 import java.util.List;

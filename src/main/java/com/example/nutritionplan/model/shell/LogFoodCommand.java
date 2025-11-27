@@ -2,6 +2,8 @@ package com.example.nutritionplan.model.shell;
 
 import com.example.nutritionplan.model.*;
 import com.example.nutritionplan.model.service.NutritionCalculator;
+import com.example.nutritionplan.model.user.UserHistory;
+import com.example.nutritionplan.model.user.UserProfile;
 
 import java.io.PrintStream;
 import java.time.LocalDate;

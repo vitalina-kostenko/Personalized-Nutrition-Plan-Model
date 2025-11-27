@@ -1,7 +1,10 @@
 package com.example.nutritionplan.model;
 
 import java.util.List;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "food_items")
 public class FoodItem {
     private Integer food_id;
     private String name;
@@ -14,6 +17,8 @@ public class FoodItem {
     public FoodItem() {
     }
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Integer getFood_id() {
         return food_id;
     }
@@ -22,6 +27,7 @@ public class FoodItem {
         this.food_id = food_id;
     }
 
+    @Column(nullable = false, unique = true)
     public String getName() {
         return name;
     }
@@ -30,6 +36,7 @@ public class FoodItem {
         this.name = name;
     }
 
+    @Column(nullable = false)
     public Double getCalories() {
         return calories;
     }

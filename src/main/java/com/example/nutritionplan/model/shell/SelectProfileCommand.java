@@ -1,31 +1,38 @@
 package com.example.nutritionplan.model.shell;
 
 import com.example.nutritionplan.model.FoodItem;
-import com.example.nutritionplan.model.UserHistory;
-import com.example.nutritionplan.model.UserProfile;
+import com.example.nutritionplan.model.repository.FoodItemRepository;
+import com.example.nutritionplan.model.repository.UserProfileRepository;
+import com.example.nutritionplan.model.user.UserHistory;
+import com.example.nutritionplan.model.user.UserProfile;
 import com.example.nutritionplan.model.service.FileStorageService;
 import com.example.nutritionplan.model.service.NutritionCalculator;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Scanner;
 
+@Component
 public class SelectProfileCommand implements Command {
     private final Scanner scanner;
-    private final List<UserProfile> userProfiles;
-    private final List<FoodItem> foodDatabase;
+    private final UserProfileRepository userProfileRepo;
+    private final FoodItemRepository foodItemRepo;
     private final NutritionCalculator calculator;
     private final FileStorageService storage;
 
-    public SelectProfileCommand(Scanner scanner, List<UserProfile> userProfiles, List<FoodItem> foodDatabase, NutritionCalculator calculator, FileStorageService storage) {
+    public SelectProfileCommand(Scanner scanner, UserProfileRepository userProfileRepo, FoodItemRepository foodItemRepo, NutritionCalculator calculator, FileStorageService storage) {
         this.scanner = scanner;
-        this.userProfiles = userProfiles;
-        this.foodDatabase = foodDatabase;
+        this.userProfileRepo = userProfileRepo;
+        this.foodItemRepo = foodItemRepo;
         this.calculator = calculator;
         this.storage = storage;
     }
 
     @Override
     public Result execute() {
+        List<UserProfile> userProfiles = userProfileRepo.findAll();
+        List<FoodItem> foodDatabase = foodItemRepo.findAll();
+
         if (userProfiles.isEmpty()) {
             System.out.println("Збережених профілів не знайдено. Будь ласка, створіть новий за допомогою команди 'create'.");
             return Result.CONTINUE;
@@ -42,7 +49,6 @@ public class SelectProfileCommand implements Command {
             if (choice > 0 && choice <= userProfiles.size()) {
                 UserProfile selectedUser = userProfiles.get(choice - 1);
 
-                // Завантажуємо історію для обраного користувача
                 UserHistory history = storage.loadUserHistory(selectedUser.getUser_id());
                 if (history.getUserProfile() == null) {
                     history.setUserProfile(selectedUser);
@@ -53,6 +59,7 @@ public class SelectProfileCommand implements Command {
                 Menu userSessionMenu = new Menu(selectedUser.getFirst_name().toLowerCase(), scanner);
                 userSessionMenu.add(new Return());
                 userSessionMenu.add(new Help("Меню сесії. 'log-food' - записати їжу, 'show-report' - звіт."));
+
                 userSessionMenu.add(new LogFoodCommand(scanner, history, calculator, foodDatabase));
                 userSessionMenu.add(new ShowReportCommand(history, calculator, foodDatabase));
                 userSessionMenu.execute();

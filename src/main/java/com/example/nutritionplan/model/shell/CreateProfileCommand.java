@@ -1,70 +1,92 @@
 package com.example.nutritionplan.model.shell;
 
-import com.example.nutritionplan.model.UserProfile;
-import com.example.nutritionplan.model.UserProfileBuilder;
-import com.example.nutritionplan.model.service.FileStorageService; // <-- Новий імпорт
+import com.example.nutritionplan.model.user.UserProfile;
+import com.example.nutritionplan.model.repository.UserProfileRepository;
 
-import java.util.List;
 import java.util.Scanner;
 
 public class CreateProfileCommand implements Command {
-    private final Scanner scanner;
-    private final List<UserProfile> userProfiles;
-    private final FileStorageService storage; // <-- Нове поле для сервісу збереження
 
-    // Конструктор тепер приймає 3 аргументи
-    public CreateProfileCommand(Scanner scanner, List<UserProfile> userProfiles, FileStorageService storage) {
+    private final Scanner scanner;
+    private final UserProfileRepository userProfileRepository;
+
+    public CreateProfileCommand(Scanner scanner, UserProfileRepository userProfileRepository) {
         this.scanner = scanner;
-        this.userProfiles = userProfiles;
-        this.storage = storage;
+        this.userProfileRepository = userProfileRepository;
     }
 
     @Override
     public Result execute() {
         System.out.println("\n--- Створення нового профілю ---");
+
         try {
             System.out.print("Ваше ім'я: ");
-            String firstName = scanner.nextLine();
+            String firstName = scanner.nextLine().trim();
+            if (firstName.isEmpty()) {
+                System.out.println("Ім'я не може бути пустим.");
+                return Result.CONTINUE;
+            }
+
             System.out.print("Дата народження (РРРР-ММ-ДД): ");
-            String dob = scanner.nextLine();
+            String dob = scanner.nextLine().trim();
+
             System.out.print("Ваша вага в кг: ");
-            double weight = Double.parseDouble(scanner.nextLine());
+            double weight = Double.parseDouble(scanner.nextLine().trim().replace(",", "."));
+
             System.out.print("Ваш зріст в см: ");
-            double height = Double.parseDouble(scanner.nextLine());
+            double height = Double.parseDouble(scanner.nextLine().trim().replace(",", "."));
+
             System.out.print("Стать (male/female): ");
-            String gender = scanner.nextLine();
+            String genderInput = scanner.nextLine().trim().toUpperCase();
+
+            String gender = genderInput.startsWith("M") ? "MALE" : "FEMALE";
+
             System.out.print("Рівень активності (sedentary, light, moderate, active): ");
-            String activity = scanner.nextLine();
+            String activityInput = scanner.nextLine().trim().toUpperCase().replace(" ", "_");
+
+            String activityLevel = validateActivity(activityInput);
+
             System.out.print("Ваша ціль (lose_weight, maintain, gain_muscle): ");
-            String goal = scanner.nextLine();
+            String goalInput = scanner.nextLine().trim().toUpperCase().replace(" ", "_");
+            String goal = validateGoal(goalInput);
 
-            int newId = userProfiles.stream().mapToInt(UserProfile::getUser_id).max().orElse(0) + 1;
+            UserProfile newUser = new UserProfile();
+            newUser.setFirst_name(firstName);
+            newUser.setDate_of_birth(dob);
+            newUser.setWeight_kg(weight);
+            newUser.setHeight_cm(height);
+            newUser.setGender(gender);
+            newUser.setActivity_level(activityLevel);
+            newUser.setGoal(goal);
 
-            UserProfile newUser = UserProfileBuilder.create()
-                    .userId(newId)
-                    .firstName(firstName)
-                    .dateOfBirth(dob)
-                    .weight(weight)
-                    .height(height)
-                    .gender(gender)
-                    .activityLevel(activity)
-                    .goal(goal)
-                    .build();
+            UserProfile savedUser = userProfileRepository.save(newUser);
 
-            userProfiles.add(newUser);
-
-            // ---> ВАЖЛИВА ЗМІНА: ЗБЕРІГАЄМО ОДРАЗУ ПІСЛЯ ДОДАВАННЯ <---
-            storage.saveUserProfiles(userProfiles);
-
-            System.out.println("\n[Успіх]: Профіль для " + firstName + " створено та збережено!");
+            System.out.println("\n[Успіх] Профіль створено! Ваш ID: " + savedUser.getUser_id());
+            System.out.println("Тепер ви можете вибрати цей профіль командою 'select'.");
 
         } catch (NumberFormatException e) {
-            System.out.println("[Помилка]: Вага та зріст повинні бути числами.");
+            System.out.println("[Помилка] Введено некоректне число. Використовуйте крапку для дробових чисел.");
         } catch (Exception e) {
-            System.out.println("[Помилка] під час створення профілю: " + e.getMessage());
+            System.out.println("[Критична помилка] Не вдалося створити профіль: " + e.getMessage());
+            e.printStackTrace();
         }
 
         return Result.CONTINUE;
+    }
+
+    private String validateActivity(String input) {
+        if (input.contains("SEDENTARY")) return "SEDENTARY";
+        if (input.contains("LIGHT")) return "LIGHT_ACTIVE";
+        if (input.contains("MODERATE")) return "MODERATE_ACTIVE";
+        if (input.contains("ACTIVE")) return "VERY_ACTIVE";
+        return input;
+    }
+
+    private String validateGoal(String input) {
+        if (input.contains("LOSE")) return "LOSE_WEIGHT";
+        if (input.contains("MAINTAIN")) return "MAINTAIN_WEIGHT";
+        if (input.contains("GAIN")) return "GAIN_MUSCLE";
+        return input;
     }
 
     @Override

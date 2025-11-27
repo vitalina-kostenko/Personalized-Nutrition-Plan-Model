@@ -1,5 +1,6 @@
 package com.example.nutritionplan.model;
 
+import com.example.nutritionplan.model.user.UserProfile;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -2,7 +2,9 @@ package com.example.nutritionplan.model.service;
 
 import java.time.LocalDate;
 import java.time.Period;
+import org.springframework.stereotype.Service;
 
+@Service
 public class AgeCalculationServiceImpl implements AgeCalculationService {
     @Override
     public int calculateAge(String dateOfBirth) {
